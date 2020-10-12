@@ -46,22 +46,20 @@ export default {
       this.autoPlay();
     },
     rightBtn() {
-      if (this.btnFlag) {
-        this.currt++;
-        this.currtFun();
-      }
+      this.currt++;
+      this.currtFun();
     },
     leftBtn() {
-      if (this.btnFlag) {
-        this.currt--;
-        this.currtFun();
-      }
+      this.currt--;
+      this.currtFun();
     },
     currtFun() {
       let random = this.randomFun(1, 3);
       if (this.currt >= this.imgs.length) {
         this.currt = 0;
-      } else if (this.currt < 0) {
+      }
+
+      if (this.currt < 0) {
         this.currt = this.imgs.length - 1;
       }
       if (random == 1) {
@@ -77,7 +75,7 @@ export default {
       let number = 6;
       let domStr = `<div class="swiperFram"></div>`;
       let swiperW = swiperImg.offsetWidth;
-      let nowSrc = this.imgs[0].src;
+      let nowSrc = this.imgs[this.currt].src;
       let sWidth = `${parseInt(swiperW / number)}`;
       swiperImg.innerHTML = "";
       for (let i = 0; i < number; i++) {
@@ -93,60 +91,51 @@ export default {
     clickFun() {
       let _that = this;
       this.btnFlag = false;
-      let swiperImg = this.$refs.swiperImg;
-      let swiperHeight = swiperImg.offsetHeight;
-      let swiperChilder = swiperImg.children;
-      let nowSrc = this.imgs[this.currt].src;
-      for (let i = 0; i < swiperChilder.length; i++) {
-        _that.$nextTick(function () {
+      _that.$nextTick(() => {
+        let swiperImg = _that.$refs.swiperImg;
+        let swiperHeight = swiperImg.offsetHeight;
+        let swiperChilder = swiperImg.children;
+        let nowSrc = _that.imgs[_that.currt].src;
+        for (let i = 0; i < swiperChilder.length; i++) {
           swiperImg.children[i].style.backgroundImage = `url(${nowSrc})`;
-        });
-        swiperImg.children[i].style.top =
-          i % 2 == 0 ? `${swiperHeight}px` : `-${swiperHeight}px`;
-        swiperImg.children[i].addEventListener("transitionend", function () {
-          swiperImg.children[i].style.top = 0;
-          setTimeout(function () {
-            _that.btnFlag = true;
-          }, 2000);
-        });
-      }
+          swiperImg.children[i].style.top =
+            i % 2 == 0 ? `${swiperHeight}px` : `-${swiperHeight}px`;
+          swiperImg.children[i].addEventListener("transitionend", function () {
+            swiperImg.children[i].style.top = 0;
+          });
+        }
+      });
     },
     flipFun() {
       let _that = this;
       this.btnFlag = false;
-      let swiperImg = this.$refs.swiperImg;
-      let swiperChilder = swiperImg.children;
-      let nowSrc = this.imgs[this.currt].src;
-      for (let i = 0; i < swiperChilder.length; i++) {
-        _that.$nextTick(function () {
+      _that.$nextTick(() => {
+        let swiperImg = _that.$refs.swiperImg;
+        let swiperChilder = swiperImg.children;
+        let nowSrc = _that.imgs[_that.currt].src;
+        for (let i = 0; i < swiperChilder.length; i++) {
           swiperImg.children[i].style.backgroundImage = `url(${nowSrc})`;
-        });
-        swiperImg.children[i].style.transform = `rotateY(90deg)`;
-        swiperImg.children[i].addEventListener("transitionend", function () {
-          swiperImg.children[i].style.transform = `rotateY(0)`;
-          setTimeout(function () {
-            _that.btnFlag = true;
-          }, 2000);
-        });
-      }
+          swiperImg.children[i].style.transform = `rotateY(90deg)`;
+          swiperImg.children[i].addEventListener("transitionend", function () {
+            swiperImg.children[i].style.transform = `rotateY(0)`;
+          });
+        }
+      });
     },
     salcFun() {
       let _that = this;
       this.btnFlag = false;
-      let swiperImg = this.$refs.swiperImg;
-      let swiperChilder = swiperImg.children;
-      let nowSrc = this.imgs[this.currt].src;
-      swiperImg.style.transform = `scale(1.1)`;
-      swiperImg.addEventListener("transitionend", function () {
+      _that.$nextTick(() => {
+        let swiperImg = _that.$refs.swiperImg;
+        let swiperChilder = swiperImg.children;
+        let nowSrc = _that.imgs[_that.currt].src;
+        swiperImg.style.transform = `scale(1.1)`;
         for (let i = 0; i < swiperChilder.length; i++) {
-          _that.$nextTick(function () {
-            swiperImg.children[i].style.backgroundImage = `url(${nowSrc})`;
-          });
+          swiperImg.children[i].style.backgroundImage = `url(${nowSrc})`;
         }
-        swiperImg.style.transform = `scale(1)`;
-        setTimeout(function () {
-          _that.btnFlag = true;
-        }, 2000);
+        swiperImg.addEventListener("transitionend", function () {
+          swiperImg.style.transform = `scale(1)`;
+        });
       });
     },
     randomFun(min, max) {
